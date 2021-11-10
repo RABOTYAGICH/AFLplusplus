@@ -20,7 +20,7 @@ import sys
 import os
 import re
 
-# string_re = re.compile('(\\"(\\\\.|[^"\\\\])*\\")') # future use
+# string_re = re.compile('(\\"(\\\\.|[^"\\\\])*\\")') # future usedsfsdfsddf
 
 with open(".clang-format") as f:
     fmt = f.read()
