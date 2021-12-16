@@ -31,73 +31,12 @@
 
 #include "types.h"
 #define SHM_ENV_VAR2 "__AFL_SHM_ID2"
-typedef struct ht_original
-{
-    unsigned long long *addrs;
-    struct ht_original *next;
-    int count;
-} ht_original;
+
 
 
 void *shm_ptr;
 static int id_sh = 0;
 
-typedef struct ht_entry {
-    ht_original original;
-    ht_original *head;
-} ht_entry;
-#define INITIAL_CAPACITY 65537  // must not be zero
-
-// Hash table structure: create with ht_create, free with ht_destroy.
-typedef struct ht {
-    ht_entry entries[65547];  // hash slots
-    unsigned int length;      // number of items in hash table
-    int id;
-    
-} ht;
-
-struct Header {
-    int bitseq;
-    int id;
-    int refcount;
-    size_t size;
-    long prev, next; // offsets
-    unsigned char has_mutex;
-    unsigned char is_free;
-    pthread_mutex_t mutex;
-    pthread_mutexattr_t attr;
-};
-#define BITSEQ 536870911
-#define shmalloc(i, s, p, sz) _shmalloc(i, s, p, sz, __FILE__, __LINE__)
-#define shmfree(ptr, sz, s) _shmfree(ptr, sz, s,  __FILE__, __LINE__)
-
-typedef struct Header Header;
-
-/**
- * Initializes values in header
- */
-void initialize_header(Header *h, size_t size, int id, unsigned char is_first);
-
-/**
- * Destroys the given header structure.
- */
-void destroy_header(Header *, void *);
-
-/**
- * Allocate shared .memory that's already been attached via shmat(3).
- * Returns a pointer to the newly allocated memory.
- */
-void *_shmalloc(int id, size_t *size, void *shmptr, size_t shm_size,
-                char *filename, int linenumber);
-
-/**
- * Frees a block of shared memory previously allocated with shmalloc().
- */
-void _shmfree(void *ptr, size_t shm_size, void *shm_ptr, char *filename, int linenumber);
-
-long ptr2offset(void *ptr, void *shm_ptr);
-
-void *offset2ptr(long offset, void *shm_ptr);
 
 
 typedef struct sharedmem {
@@ -119,7 +58,6 @@ typedef struct sharedmem {
 #endif
 
   u8 *map;                                          /* shared memory region */
-  ht *shared_memory;                                          /* shared memory region */
 
 
   size_t map_size;                                 /* actual allocated size */
