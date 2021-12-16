@@ -548,8 +548,15 @@ int main(int argc, char **argv_orig, char **envp) {
 
       case 'o':                                               /* output dir */
 
+      
         if (afl->out_dir) { FATAL("Multiple -o options not supported"); }
         afl->out_dir = optarg;
+        char outfile[50];
+        strcpy(outfile, optarg);
+        strcat(outfile,"/default/coverage.dat");
+        OKF("FUZZ 1 555 %s\n", outfile);
+
+        setenv("AFL_COVDIR", outfile,1);
         break;
 
       case 'M': {                                           /* main sync ID */
